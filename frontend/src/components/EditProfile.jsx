@@ -34,7 +34,8 @@ const EditProfile = () => {
   const [businessCategory, setBusinessCategory] = useState([]);
   const [businessName, setBusinessName] = useState('');
   const [businessAddress, setBusinessAddress] = useState('');
-  const [profilePic, setProfilePic] = useState('');
+  const [profilePic, setProfilePic] = useState(null); // Actual file object
+const [profilePicPreview, setProfilePicPreview] = useState(null); // Blob URL for preview
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const location = useLocation();
@@ -114,13 +115,13 @@ const EditProfile = () => {
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setProfilePic(reader.result); // Save the base64 image or upload to the server.
-      };
-      reader.readAsDataURL(file);
+      const blobUrl = URL.createObjectURL(file);
+      console.log(blobUrl)
+      setProfilePic(file); // Save the file object to send to the backend
+      setProfilePicPreview(blobUrl); 
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newAddress = {
@@ -132,22 +133,18 @@ const EditProfile = () => {
     };
     // const fullData = { name, email, phone, address: newAddress, businessCategory, businessName, businessAddress };
     const formData = new FormData();
-  formData.append('name', name);
-  formData.append('email', email);
-  formData.append('phone', phone);
-  formData.append('area', area);
-  formData.append('city', city);
-  formData.append('state', state);
-  formData.append('country', country);
-  formData.append('pincode', pincode);
-  formData.append('businessCategory', businessCategory);
-  formData.append('businessName', businessName);
-  formData.append('businessAddress', businessAddress);
+
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('phone', phone);
+    formData.append('address', JSON.stringify({ area, city, state, country, pincode }));
+    formData.append('businessCategory', businessCategory);
+    formData.append('businessName', businessName);
+    formData.append('businessAddress', businessAddress);
+    // Add the actual file to FormData
   if (profilePic) {
-    formData.append('image', profilePic); // Add the file
+    formData.append('image', profilePic);
   }
-    
-    
     try {
       const response = await axios.post(`${backend_API}/auth/updateProfile`, formData, {
         headers: {
@@ -165,7 +162,7 @@ const EditProfile = () => {
 
     } catch (error) {
       console.log(error);
-      console.log(response.data.message);
+      // console.log(response.data.message);
       
       return false;
     }
@@ -202,7 +199,7 @@ const EditProfile = () => {
                   <div className='profilepic d-flex justify-content-between'>
                     <label htmlFor="profilePictureInput" className='rounded-md m-3 cursor-pointer'>
                       <img
-                        src={profilePic || "https://img.daisyui.com/images/profile/demo/2@94.webp"}
+                        src={profilePicPreview || "https://img.daisyui.com/images/profile/demo/2@94.webp"}
                         alt="Profile"
                         className="rounded-md w-[100px]"
                          
@@ -213,6 +210,7 @@ const EditProfile = () => {
                       accept="image/*"
                       onChange={handleProfilePictureChange}
                       className="hidden"
+                      name='image'
                       id="profilePictureInput"
                     />
                     <label

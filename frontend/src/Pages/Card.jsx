@@ -46,7 +46,7 @@ const Card = () => {
                                    <div>
                                    <figure className=''>
                                         <img className='rounded-md w-[200px]  overflow-hidden'
-                                            src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                                            src={profile.profilePic}
                                             alt="Movie" />
                                     </figure>
                                     <div className='text-center'>
