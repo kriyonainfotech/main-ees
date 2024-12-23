@@ -32,12 +32,6 @@ const UserSideBar = () => {
       title: 'wallete',
       icon: <FaWallet />,
       path: '/admin/card',
-    },
-    {
-      id: 5,
-      title: 'work',
-      icon: <FaNetworkWired />,
-      path: '/work',
     }
 
   ]

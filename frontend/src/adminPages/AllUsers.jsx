@@ -17,7 +17,7 @@ const AllUsers = () => {
   const fetchData = async () => {
 
     // const token = JSON.parse(localStorage.getItem('token'))
-    //   console.log(token, "token Edit");
+      // console.log(token, "token Edit");
     try {
       const response = await axios.get(`${backend_API}/auth/getAllUser`, {
         headers: {

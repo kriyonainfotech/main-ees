@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const  ServieceCategories = ({ categories }) => {
- 
     const navigate = useNavigate();
-  
-
     return (
         <>
       

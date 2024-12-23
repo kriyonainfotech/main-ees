@@ -10,11 +10,12 @@ const backend_API = import.meta.env.VITE_API_URL;
 
 const ServiceDetail = () => {
     const token = JSON.parse(localStorage.getItem('token'))
-    const loggedInUser = JSON.parse(localStorage.getItem("Users"))
+    // const loggedInUser = JSON.parse(localStorage.getItem("Users"))
 
     // console.log(loggedInUser.address.city, "LoginData");
     const [category, setCategory] = useState();
     const [service, setService] = useState([]);
+    const [loggedInUser, setloggedInUser] = useState([]);
 
       const [requestSent, setRequestSent] = useState(false);
 
@@ -22,6 +23,32 @@ const ServiceDetail = () => {
     const location = useLocation();
     // console.log(location.state, "catrgorys");
     // console.log(location.state, "catrgoryss");
+    const fetchUser = async () => {
+        //   console.log(token, "token Edit");
+        try {
+            const response = await axios.get(`${backend_API}/auth/getuser`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await response.data;
+            setloggedInUser(data.user)
+            console.log(data.user, "data profile");
+            if (response.status === 200) {
+                // localStorage.setItem("Users", JSON.stringify(data.user))
+                // navigate('/profile')
+                console.log("profile Successful...");
+            }
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+
+    }
+    useEffect(() => {
+        fetchUser()
+    }, [])
 
 
     const fetchData = async (cat, loggedInUserCity) => {
@@ -33,7 +60,7 @@ const ServiceDetail = () => {
             const filteredData = data.filter(
                 (user) =>
                     user.businessCategory?.some((category) => category.toLowerCase() === cat.toLowerCase()) &&
-                    user.address?.city?.toLowerCase() === loggedInUserCity.toLowerCase()
+                    user.address?.city?.toLowerCase() === loggedInUserCity?.toLowerCase()
             );
 
 
@@ -77,48 +104,12 @@ const ServiceDetail = () => {
     
 
     useEffect(() => {
-        if (location.state && loggedInUser.address.city) {
+        if (location.state && loggedInUser?.address?.city) {
             const categoryName = location.state;
             setCategory(categoryName); // Set the category in state
-            fetchData(categoryName, loggedInUser.address.city); // Fetch data with category and city
+            fetchData(categoryName, loggedInUser?.address?.city); // Fetch data with category and city
         }
-    }, [location.state, loggedInUser.address.city]);
-
-    let profile = [{
-        id: 1,
-        name: "John Doe",
-        email: "john@example.com",
-        phone: "1234567890",
-        address: "ahmdabad",
-        category: "A.C. SERVICE"
-
-    },
-    {
-        id: 2,
-        name: "Jane Doe",
-        email: "jane@example.com",
-        phone: "9876543210",
-        address: "surat",
-        category: "AUTO RICKSHAW"
-    },
-    {
-        id: 3,
-        name: "John Doe",
-        email: "john@example.com",
-        phone: "1234567890",
-        address: "rajkot",
-        category: "BAGGI (HORSE CART)"
-    },
-    {
-        id: 4,
-        name: "John Doe",
-        email: "john@example.com",
-        phone: "1234567890",
-        address: "surat",
-        category: "BAGGI (HORSE CART)"
-    },
-    ]
-
+    }, [location.state, loggedInUser?.address?.city]);
 
     return (
         <>

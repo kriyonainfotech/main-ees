@@ -182,6 +182,7 @@ const [profilePicPreview, setProfilePicPreview] = useState(null); // Blob URL fo
     setBusinessCategory(location?.state?.businessCategory || []),
       setBusinessName(location?.state?.businessName),
       setBusinessAddress(location?.state?.businessAddress)
+      setProfilePic(location?.state?.profilePic)
   }, [location?.state])
 
   return (
@@ -199,7 +200,7 @@ const [profilePicPreview, setProfilePicPreview] = useState(null); // Blob URL fo
                   <div className='profilepic d-flex justify-content-between'>
                     <label htmlFor="profilePictureInput" className='rounded-md m-3 cursor-pointer'>
                       <img
-                        src={profilePicPreview || "https://img.daisyui.com/images/profile/demo/2@94.webp"}
+                        src={profilePicPreview ||profilePic}
                         alt="Profile"
                         className="rounded-md w-[100px]"
                          
@@ -332,7 +333,7 @@ const [profilePicPreview, setProfilePicPreview] = useState(null); // Blob URL fo
                         <label className="block text-md font-medium p-2 text-bold ">Bussiness Category</label>
                         <div className="">
                           {/* Display Selected Category */}
-                          <div className="border border-2 rounded-md p-2 bg-white"
+                          <div className="border border-2 text-capitalize rounded-md p-2 bg-white"
                             onClick={toggleDropdown}
                           >
                             {businessCategory.length > 0 ? (
@@ -353,7 +354,7 @@ const [profilePicPreview, setProfilePicPreview] = useState(null); // Blob URL fo
                               {categories.map((category, i) => (
                                 <li
                                   key={i}
-                                  className={`cursor-pointer px-4 py-2 hover:bg-green-200 ${businessCategory === category.categoryName ? "bg-green-200" : ""
+                                  className={`cursor-pointer px-4 py-2 text-capitalize hover:bg-green-200 ${businessCategory === category.categoryName ? "bg-green-200" : ""
                                     }`}
                                   onClick={() => toggleSelection(category.categoryName)}
                                 >

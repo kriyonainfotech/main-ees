@@ -24,6 +24,12 @@ const AdminNavbar = () => {
             icon: <FaPlus />
 
         },
+        {
+            title: 'Work',
+            link: '/work',
+            icon: <FaPlus />
+
+        },
     ]
 
     const NaveItems = (

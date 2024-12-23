@@ -14,6 +14,7 @@ const Work = () => {
     const [recievedRequest, setRecievedRequest] = useState([])
     const [sendedRequest, setSendedRequest] = useState([]);
     const [currentRequest, setCurrentRequest] = useState('');
+    const [isReceiverAvailable, setIsReceiverAvailable] = useState(true); // Receiver availability
     const requests = [
         {
             id: 1,
@@ -96,9 +97,16 @@ const Work = () => {
 
                     {/* Render based on current request type */}
                     {currentRequest === "Received Request" ? (
-                        <Recievedrequest recievedRequest={recievedRequest} />
+                        <Recievedrequest
+                            recievedRequest={recievedRequest}
+                            isReceiverAvailable={isReceiverAvailable}
+                            setIsReceiverAvailable={setIsReceiverAvailable}
+                           />
                     ) : (
-                        <Senedrequest sendedRequest={sendedRequest} />
+                        <Senedrequest
+                            sendedRequest={sendedRequest}
+                            isReceiverAvailable={isReceiverAvailable} 
+                        />
                     )}
                 </div>
                 {/* <Senedrequest sendedRequest= {sendedRequest}/>    */}

@@ -9,13 +9,28 @@ import AdminNavbar from '../admincomponents/AdminNavbar';
 import { FaStar } from 'react-icons/fa';
 import BannerAdd from './ProfileBanner/BannerAdd';
 import AllBannners from './ProfileBanner/AllBannners';
+import Cookies from 'js-cookie';
+
 
 const backend_API = import.meta.env.VITE_API_URL; 
 
 
 const Profile = () => {
     const [profile, setProfile] = useState("");
+    const [userRating, setUserRating] = useState(() => {
+            const savedRating = localStorage.getItem("userRating");
+            return savedRating ? JSON.parse(savedRating) : 0; // Default to 0 if no rating is stored
+          });
+    const [tokenCookie, setTokenCookie] = useState(null);
     const navigate = useNavigate();
+
+
+    useEffect(() => {
+        const tokenValue = Cookies.get("refreshToken"); // 'token' ne tamaru cookie name replace karo
+        setTokenCookie(tokenValue);
+    }, []);
+console.log(tokenCookie, "cookie token");
+console.log(document.cookie,"doc cokkies");
     const fetchData = async () => {
         const token = JSON.parse(localStorage.getItem('token'))
         //   console.log(token, "token Edit");
@@ -43,6 +58,28 @@ const Profile = () => {
     useEffect(() => {
         fetchData()
     }, [])
+
+      // Handle user rating click
+  const handleUserRatingClick = (rating) => {
+    setUserRating(rating);
+    localStorage.setItem("userRating", JSON.stringify(rating)); // Store user rating in localStorage
+  };
+
+  // Render stars for the rating
+  const renderStars = (rating, maxRating = 5, onClick) => {
+    const stars = [];
+    for (let i = 1; i <= maxRating; i++) {
+      stars.push(
+        <FaStar
+          key={i}
+          className={` ${i <= rating ? "text-warning" : ""}`}
+          onClick={() => onClick(i)}
+          style={{ cursor: "pointer" }}
+        />
+      );
+    }
+    return stars;
+  };
 
     return (
         <>
@@ -88,13 +125,11 @@ const Profile = () => {
                                                 <h6 className='text-gray py-3'>Bussiness Category <PiShoppingBagLight className='inline-block' /></h6>
                                                 {profile.businessCategory ? (<div className='btn w-50  d-flex justify-content-center text-uppercase rounded-md text-white bg-orange py-2'>{profile.businessCategory}</div>) : (<></>) }
 
-                                                <div className="rating rating-sm py-4 d-flex align-items-center">
-                                                    <FaStar className='text-warning' />
-                                                    <FaStar className='text-warning' />
-                                                    <FaStar className='text-warning' />
-                                                    <FaStar className='text-warning' />
-                                                    <FaStar className='text-warning' />
-                                                </div>
+                                                <div className="rating rating-sm py-1 w-full text-center d-flex align-items-center justify-content-center">
+                                                {renderStars(userRating, 5, handleUserRatingClick)}
+                                                {/* <span> User rating: {userRating}</span> */}
+                                                <span className='btn ms-2 p-0 px-3 bg-green text-white'>{userRating}</span>
+                                            </div>
                                                   <BannerAdd/>
                                             </div>
                                         </div>

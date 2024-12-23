@@ -1,9 +1,9 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import logo from "../../public/ees-logo.png"
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 
-import { categories } from '../ServiceCategory'
+// import { categories } from '../ServiceCategory'
 
 const backend_API = import.meta.env.VITE_API_URL; 
 
@@ -16,6 +16,7 @@ const RegisterNextPage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [businessName, setBusinessName] = useState('');
   const [businessAddress, setBusinessAddress] = useState('');
+  const [categories, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false)
   const isAuthenticated = localStorage.getItem("token");
@@ -35,6 +36,27 @@ const RegisterNextPage = () => {
     setBusinessCategory(category); // Set selected category
     setIsDropdownOpen(false); // Close dropdown
   };
+
+  const fetchCategory = async () => {
+    try {
+      const response = await axios.get(`${backend_API}/category/getAllCategory`);
+      const sortedCategories = response.data.category.sort((a, b) =>
+        a.categoryName.localeCompare(b.categoryName)
+      );
+
+      setCategories(sortedCategories);
+      // console.log(sortedCategories, "sortedCategories");
+    }
+    catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  }
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
+
+
   // const notify = () => toast("Registration Successful");
   const handleSubmits = async (e) => {
     setLoading(true)
@@ -119,7 +141,7 @@ const RegisterNextPage = () => {
                           >
                             {businessCategory.length > 0 ? (
                              
-                                  <span className="inline-block px-3 text-black py-1  ">
+                                  <span className="inline-block text-capitalize px-3 text-black py-1  ">
                                   {businessCategory}
                                 </span>
 
@@ -135,11 +157,11 @@ const RegisterNextPage = () => {
                               {categories.map((category, i) => (
                                 <li
                                   key={i}
-                                  className={`cursor-pointer px-4 py-2 hover:bg-green-200 ${businessCategory === category.name ? "bg-green-200" : ""
+                                  className={`cursor-pointer text-capitalize px-4 py-2 hover:bg-green-200 ${businessCategory === category.categoryName ? "bg-green-200" : ""
                                     }`}
-                                  onClick={() => selectCategory(category.name)}
+                                  onClick={() => selectCategory(category.categoryName)}
                                 >
-                                  {category.name}
+                                  {category.categoryName}
                                 </li>
                               ))}
                             </ul>

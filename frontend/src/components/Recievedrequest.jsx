@@ -7,18 +7,22 @@ import acService from '../../public/service-icons/ac service.png'
 const backend_API = import.meta.env.VITE_API_URL;
 
 
-const Recievedrequest = ({ recievedRequest }) => {
+const Recievedrequest = ({ recievedRequest ,isReceiverAvailable, setIsReceiverAvailable  }) => {
     const token = JSON.parse(localStorage.getItem('token'))
     const naviget = useNavigate()
 
     const handleAcceptRequest = async (senderId) => {
+        // console.log(senderId,"sendr id");
+        
         try {
-            const response = await axios.post(`${backend_API}/request/receivedRequest`, { senderId: senderId }, {
+            const response = await axios.post(`${backend_API}/request/receivedRequest`, { senderId: senderId },{
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
             });
+            console.log(response.data,"recieved data");
+            
             alert("Requests Accept successfully:")
             if (response.status === 200) {
                 console.log("Requests Accept successfully:", response.data);
@@ -31,9 +35,6 @@ const Recievedrequest = ({ recievedRequest }) => {
             alert("Failed to Accept user requests. Please try again.");
             return null;
         }
-
-
-
 
     }
     const cancleRequest = async (senderId) => {
@@ -123,9 +124,13 @@ const Recievedrequest = ({ recievedRequest }) => {
                                                                     <Link className='btn pt-2  w-50  border-green rounded-1 text-semibold text-green btn-outline-orange' >
                                                                         Contect Now
                                                                     </Link>
-                                                                ) : (<Link onClick={() => handleAcceptRequest(receive.user._id)} className='btn pt-2  w-50  border-orange rounded-1 text-semibold text-orange btn-outline-orange' >
-                                                                    Accept
-                                                                </Link>)
+                                                                ) : (<Link disabled={!isReceiverAvailable} onClick={() => handleAcceptRequest(receive.user._id)} className='btn pt-2  w-50  border-orange rounded-1 text-semibold text-orange btn-outline-orange' >
+                                                                    
+                                                                    {isReceiverAvailable ? 'Accept' : 'Unavailable'}
+                                                                </Link>
+                                                                  
+                                                                )
+                                                                
                                                             }
                                                             <Link onClick={() => cancleRequest(receive.user._id)} className='btn pt-2  w-50  border-orange rounded-1 text-semibold text-orange btn-outline-orange' >
                                                                 cancle
