@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FaCalendar, FaNetworkWired, FaPowerOff, FaUser, FaWallet } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
-import logo from "../../public/ess-121.png"
 import axios from 'axios'
 import GetAdmin from './GetAdmin'
 import Logout from './Logout'
+import { UserContext } from '../UserContext'
 
 const backend_API = import.meta.env.VITE_API_URL;
 
 const UserSideBar = () => {
+   const { user } = useContext(UserContext);
   const [profile, setProfile] = useState("");
   const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem('token'))
@@ -35,39 +36,6 @@ const UserSideBar = () => {
     }
 
   ]
-  const fetchData = async () => {
-
-    try {
-      const response = await axios.get(`${backend_API}/auth/getuser`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-      });
-      const data = await response.data;
-      setProfile(data.user)
-      console.log(data, "data sidebar");
-      if (response.status === 200) {
-        // localStorage.setItem("Users", JSON.stringify(data.user))
-        console.log("profile Successful...");
-      }
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  const handleLogout = () => {
-    localStorage.removeItem('token'); // Clear the token
-    localStorage.removeItem('Users'); // Clear the User
-    navigate('/login'); // Redirect to login
-    window.location.reload();
-  };
   return (
     <>
       <div className="offcanvas bg-white offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
@@ -75,10 +43,10 @@ const UserSideBar = () => {
 
           <div className='w-full d-flex align-items-center gap-4'>
             <div class="img w-[80px] h-[80px] rounded-lg border bg-red overflow-hidden d-flex">
-              <img src={profile.profilePic || "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/220px-User_icon_2.svg.png"} className='w-full h-full' />
+              <img src={user?.profilePic || "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/220px-User_icon_2.svg.png"} className='w-full h-full' />
             </div>
             <div>
-              <h3>{profile.name}</h3>
+              <h3>{user?.name}</h3>
             </div>
           </div>
           <div className=' d-flex justify-content-center'>

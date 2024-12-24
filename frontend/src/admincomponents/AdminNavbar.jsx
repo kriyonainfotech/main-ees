@@ -86,8 +86,13 @@ const AdminNavbar = () => {
                                         </svg>
                                     </button>
                                     <ul class="dropdown-menu mt-5 p-3">
-
-                                        {NaveItems}
+                                    {
+                                            navManu.map((val, i) => {
+                                                return (
+                                                    <li><Link className=' d-flex align-items-center text-black gap-1 ' to={val.link}>{val.title} {val.icon}</Link></li>
+                                                )
+                                            })
+                                        }   
                                     </ul>
                                 </div>
 

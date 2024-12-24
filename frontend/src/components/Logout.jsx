@@ -16,6 +16,8 @@ const Logout = () => {
           'Content-Type': 'application/json',
           // 'Authorization': `Bearer ${token}`
         },
+        withCredentials: true, 
+        
       });
       const data = await response.data;
       console.log(data, "data logout");

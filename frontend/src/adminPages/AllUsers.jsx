@@ -57,10 +57,8 @@ const AllUsers = () => {
       });
       console.log(response.data, "delet data");
       if (response.status === 200) {
-
         alert("User deleted successfully");
-        console.log("User deleted successfully");
-
+        console.log("User deleted successfully")
         fetchData();
       }
 

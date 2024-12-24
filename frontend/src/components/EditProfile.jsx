@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { RiStarSFill } from "react-icons/ri";
-import Navebar from './Navebar';
 import axios from 'axios';
 import { HiDotsHorizontal } from "react-icons/hi";
-import { FaUser, FaUserCircle, FaUserClock } from 'react-icons/fa';
-import { FaUsersBetweenLines, FaUsersLine } from 'react-icons/fa6';
 
 import { LuUserPen } from "react-icons/lu";
 import { MdAlternateEmail } from "react-icons/md";
@@ -14,12 +10,7 @@ import { FaRegAddressCard } from "react-icons/fa6";
 import { CiEdit } from "react-icons/ci";
 import UserSideBar from './UserSideBar';
 import AdminNavbar from '../admincomponents/AdminNavbar';
-
-// import { categories } from '../ServiceCategory'
 const backend_API = import.meta.env.VITE_API_URL;
-
-// const backend_API = "https://ees-121-backend.vercel.app"
-
 const EditProfile = () => {
   const [profile, setProfile] = useState("");
   const [name, setName] = useState('');

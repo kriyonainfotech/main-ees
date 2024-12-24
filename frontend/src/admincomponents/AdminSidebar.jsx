@@ -50,32 +50,32 @@ const AdminSidebar = () => {
         
        
       ]
-      const fetchData = async () => {
+  //     const fetchData = async () => {
     
-        try {
-          const response = await axios.get(`${backend_API}/auth/getuser`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-          });
-          const data = await response.data;
-          setProfile(data.user)
-          console.log(data, "data sidebar");
-          if (response.status === 200) {
-            localStorage.setItem("Users", JSON.stringify(data.user))
-            console.log("profile Successful...");
-          }
-        } catch (error) {
-          console.log(error);
-          return false;
-        }
+  //       try {
+  //         const response = await axios.get(`${backend_API}/auth/getuser`, {
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             'Authorization': `Bearer ${token}`
+  //           },
+  //         });
+  //         const data = await response.data;
+  //         setProfile(data.user)
+  //         console.log(data, "data sidebar");
+  //         if (response.status === 200) {
+  //           localStorage.setItem("Users", JSON.stringify(data.user))
+  //           console.log("profile Successful...");
+  //         }
+  //       } catch (error) {
+  //         console.log(error);
+  //         return false;
+  //       }
     
-      }
+  //     }
       
-  useEffect(() => {
-    fetchData()
-  }, [])
+  // useEffect(() => {
+  //   fetchData()
+  // }, [])
 
   const handleLogout = () => {
     localStorage.removeItem('token'); // Clear the token

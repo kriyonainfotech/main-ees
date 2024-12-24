@@ -105,6 +105,7 @@ const Work = () => {
                     ) : (
                         <Senedrequest
                             sendedRequest={sendedRequest}
+                            setSendedRequest ={setSendedRequest}
                             isReceiverAvailable={isReceiverAvailable} 
                         />
                     )}
