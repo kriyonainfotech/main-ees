@@ -4,12 +4,16 @@ import { FaLocationDot, FaPhone, FaStar } from 'react-icons/fa6'
 import { Link, useNavigate } from 'react-router-dom'
 import acService from '../../public/service-icons/ac service.png'
 import { toast } from 'react-toastify'
+import { LuUserPen } from 'react-icons/lu'
+import Rating from './Rating'
 
 const backend_API = import.meta.env.VITE_API_URL;
 
 
 const Recievedrequest = ({ recievedRequest, isReceiverAvailable, setIsReceiverAvailable }) => {
     const [status, setStatus] = useState('');
+    const [serviceProviderId, setServiceProviderId] = useState('');
+
     const token = JSON.parse(localStorage.getItem('token'))
     const naviget = useNavigate()
     const [providerRating, setProviderRating] = useState(() => {
@@ -21,14 +25,14 @@ const Recievedrequest = ({ recievedRequest, isReceiverAvailable, setIsReceiverAv
         setProviderRating(rating);
         localStorage.setItem("providerRating", JSON.stringify(rating)); // Store provider rating in localStorage
     };
-    const renderStars = (rating, maxRating = 5, onClick) => {
+    // Render stars for the rating
+    const renderStars = (rating, maxRating = 5,) => {
         const stars = [];
         for (let i = 1; i <= maxRating; i++) {
             stars.push(
                 <FaStar
                     key={i}
-                    className={`${i <= rating ? "text-warning" : ""}`}
-                    onClick={() => onClick(i)}
+                    className={` ${i <= rating ? "text-warning" : ""}`}
                     style={{ cursor: "pointer" }}
                 />
             );
@@ -109,8 +113,11 @@ const Recievedrequest = ({ recievedRequest, isReceiverAvailable, setIsReceiverAv
         })
 
     }, [recievedRequest])
-    console.log(status, "reciver status");
-    const hendleWorkDone = () => {
+    // console.log(status, "reciver status");
+    const hendleWorkDone = (id) => {
+        console.log(id, "recievre id");
+        setServiceProviderId(id)
+
         // alert("done...")
         const workDone = [...recievedRequest]
         workDone.forEach((req) => {
@@ -145,13 +152,25 @@ const Recievedrequest = ({ recievedRequest, isReceiverAvailable, setIsReceiverAv
                                                 <div className="p-3 pt-0 col-7 col-md-12 d-flex align-items-center">
                                                     <div className='w-full '>
                                                         <div className='d-flex flex-column flex-md-row justify-content-start justify-content-md-between'>
-                                                            <div className="rating rating-sm d-flex align-items-center">
+                                                            {/* <div className="rating rating-sm d-flex align-items-center">
                                                                 <FaStar className='text-warning' />
                                                                 <FaStar className='text-warning' />
                                                                 <FaStar className='text-warning' />
                                                                 <FaStar className='text-warning' />
                                                                 <FaStar className='text-warning' />
-                                                            </div>
+                                                            </div> */}
+                                                             <div className="rating rating-sm py-3 w-full text-center d-flex align-items-center  ">
+                                                    {renderStars(receive?.user?.ratings.map((r) => {
+                                                        return r.rating
+                                                    }), 5,)}
+
+                                                    {/* <span className='btn ms-2 p-0 px-3 bg-green text-white'>{userRating}</span> */}
+                                                    <span className='btn ms-2 p-0 px-3 bg-green text-white'>{
+                                                        receive?.user?.ratings.map((r) => {
+                                                            return r.rating
+                                                        })
+                                                    }</span>
+                                                </div>
 
                                                             <h6 className='d-flex align-items-center text-orange m-0 text-sm'><span>
                                                                 <img src={acService} width={40} alt="" />
@@ -179,7 +198,7 @@ const Recievedrequest = ({ recievedRequest, isReceiverAvailable, setIsReceiverAv
                                                             }
                                                             {
                                                                 receive.status === "received" ? (
-                                                                    <Link onClick={hendleWorkDone} className='btn pt-2  w-50  border-green rounded-1 text-semibold text-green btn-outline-orange' data-bs-toggle="modal" data-bs-target="#exampleModal" >
+                                                                    <Link onClick={() => hendleWorkDone(receive.user._id)} className='btn pt-2  w-50  border-green rounded-1 text-semibold text-green btn-outline-orange' data-bs-toggle="modal" data-bs-target="#exampleModal" >
                                                                         work done
                                                                     </Link>
                                                                 ) : (
@@ -190,28 +209,7 @@ const Recievedrequest = ({ recievedRequest, isReceiverAvailable, setIsReceiverAv
                                                             }
 
                                                         </div>
-                                                        <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                            <div className="modal-dialog">
-                                                                <div className="modal-content">
-                                                                    <div className="modal-header">
-                                                                        <h1 className="modal-title fs-5" id="exampleModalLabel">Rate to User</h1>
-                                                                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-                                                                    </div>
-                                                                    <div className="modal-body">
-                                                                        {/* Provider Rating */}
-                                                                        <div className="rating rating-sm py-3 w-full text-center d-flex align-items-center justify-content-center fs-2">
-                                                                            {renderStars(providerRating, 5, handleProviderRatingClick)}
-                                                                            {/* <span className=' mx-2 p-0 px-3 bg-green rounded-1 text-white'>{providerRating}</span>
-                                                                            */}
-                                                                        </div>
-                                                                    </div>
-                                                                        {/* <div className="modal-footer">
-                                                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                                                                        </div> */}
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        <Rating serviceProviderId={serviceProviderId} />
 
 
                                                     </div>

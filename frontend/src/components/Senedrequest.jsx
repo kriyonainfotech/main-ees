@@ -11,44 +11,31 @@ const backend_API = import.meta.env.VITE_API_URL;
 
 const Senedrequest = ({ sendedRequest, isReceiverAvailable }) => {
     const [status, setStatus] = useState('');
-    // const [showPopup, setShowPopup] = useState(false);
-
-
     const token = JSON.parse(localStorage.getItem('token'))
+    // Render stars for the rating
+        const renderStars = (rating, maxRating = 5,) => {
+          const stars = [];
+          for (let i = 1; i <= maxRating; i++) {
+            stars.push(
+              <FaStar
+                key={i}
+                className={` ${i <= rating ? "text-warning" : ""}`}
+                style={{ cursor: "pointer" }}
+              />
+            );
+          }
+          return stars;
+        };  
     // console.log(token , "token in sendreq");
-
-    const cancleRequest = async (senderId) => {
-        try {
-            const response = await axios.post(`${backend_API}/request/cancelRequest`, { senderId: senderId }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            alert("Requests cancel successfully:") 
-            if (response.status === 200) {
-                console.log("Requests Cancle successfully:", response.data);
-            } else {
-                console.error("Failed to cancle requests:", response.data.message);
-                return null;
-            }
-        } catch (error) {
-            console.error("Error cancel user requests:", error);
-            alert("Failed to cancle user requests. Please try again.");
-            return null;
-        }
-
-
-    }
-    // console.log(sendedRequest.user.status,"req status");
     console.log(sendedRequest, "sended status");
+
     useEffect(() => {
         let sendeReq = [...sendedRequest]
         sendeReq.forEach((req) => {
             if (req.status === 'received') {
                 setStatus('received')
                 // toast(`Request Accepted by ${req.user.name}`)
-                
+
             }
             else if (req.status === 'canceled') {
                 setStatus('canceled')
@@ -90,12 +77,21 @@ const Senedrequest = ({ sendedRequest, isReceiverAvailable }) => {
                                                 <div className="p-3 pt-0 col-7 col-md-12 d-flex align-items-center">
                                                     <div className='w-full pt-2'>
                                                         <div className='d-flex flex-column flex-md-row  justify-content-start justify-content-md-between'>
-                                                            <div className="rating rating-sm d-flex align-items-center">
-                                                                <FaStar className='text-warning' />
-                                                                <FaStar className='text-warning' />
-                                                                <FaStar className='text-warning' />
-                                                                <FaStar className='text-warning' />
-                                                                <FaStar className='text-warning' />
+                                                            <div className="rating rating-sm py-4 d-flex align-items-center">
+                                                                {
+                                                                    receive?.user?.ratings ? (
+                                                                        <div className=' d-flex align-items-center'>
+                                                                            {renderStars(receive?.user?.ratings.map((r) => {
+                                                                                return r.rating
+                                                                            }), 5,)}
+                                                                            <span className="ps-2 ">{receive?.user?.ratings.map((r) => {
+                                                                                return r.rating
+                                                                            })}</span>
+                                                                            {/* <FaStar className= {` ${Usersdata.ratings ? "d-flex" : "d-none"}`}  /> */}
+                                                                        </div>
+                                                                    ) : (<></>)
+                                                                }
+
                                                             </div>
 
                                                             <h6 className='d-flex align-items-center text-orange m-0 text-sm'><span>
@@ -105,12 +101,12 @@ const Senedrequest = ({ sendedRequest, isReceiverAvailable }) => {
                                                         </div>
                                                         <h4 className="">{receive.user.name}</h4>
                                                         <h6 className='pt-2'></h6>
-                                                        <p className='d-flex align-items-center gap-1' ><FaLocationDot /> {receive.user.address.area} </p>
+                                                        <p className='d-flex align-items-center gap-1' ><FaLocationDot /> {receive?.user?.address?.area} </p>
 
                                                         <div className='pt-2 d-flex   gap-2  justify-content-between align-items-start w-100 flex-md-row'>
                                                             {
                                                                 receive.status === "received" ? (
-                                                                    <Link  to={`tel:${receive.user.phone}`} className='btn pt-2  w-50  border-green rounded-1 text-semibold text-green btn-outline-orange' >
+                                                                    <Link to={`tel:${receive.user.phone}`} className='btn pt-2  w-50  border-green rounded-1 text-semibold text-green btn-outline-orange' >
                                                                         Contect Now
                                                                     </Link>
                                                                 ) : (<Link onClick={() => cancleRequest(receive.user._id)} className='btn pt-2  w-50  border-orange rounded-1 text-semibold text-orange btn-outline-orange' >

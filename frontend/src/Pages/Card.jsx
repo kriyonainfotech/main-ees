@@ -9,44 +9,22 @@ const backend_API = import.meta.env.VITE_API_URL;
 
 const Card = () => {
     const { user } = useContext(UserContext);
-    console.log(user,"login user in card");
-    
-    
-    const [userRating, setUserRating] = useState(() => {
-        const savedRating = localStorage.getItem("userRating");
-        return savedRating ? JSON.parse(savedRating) : 0; // Default to 0 if no rating is stored
-      });
-      const [providerRating, setProviderRating] = useState(() => {
-        const savedRating = localStorage.getItem("providerRating");
-        return savedRating ? JSON.parse(savedRating) : 0; // Default to 0 if no rating is stored
-      }); 
-     // Handle user rating click
-  const handleUserRatingClick = (rating) => {
-    setUserRating(rating);
-    localStorage.setItem("userRating", JSON.stringify(rating)); // Store user rating in localStorage
-  };
+    console.log(user, "login user in card");
 
-  // Handle provider rating click
-  const handleProviderRatingClick = (rating) => {
-    setProviderRating(rating);
-    localStorage.setItem("providerRating", JSON.stringify(rating)); // Store provider rating in localStorage
-  };
-
-  // Render stars for the rating
-  const renderStars = (rating, maxRating = 5, onClick) => {
-    const stars = [];
-    for (let i = 1; i <= maxRating; i++) {
-      stars.push(
-        <FaStar
-          key={i}
-          className={` ${i <= rating ? "text-warning" : ""}`}
-          onClick={() => onClick(i)}
-          style={{ cursor: "pointer" }}
-        />
-      );
-    }
-    return stars;
-  };
+    // Render stars for the rating
+    const renderStars = (rating, maxRating = 5,) => {
+        const stars = [];
+        for (let i = 1; i <= maxRating; i++) {
+            stars.push(
+                <FaStar
+                    key={i}
+                    className={` ${i <= rating ? "text-warning" : ""}`}
+                    style={{ cursor: "pointer" }}
+                />
+            );
+        }
+        return stars;
+    };
     return (
         <>
             <section className='mt-24 p-4'>
@@ -64,34 +42,39 @@ const Card = () => {
                                         <div className='text-center'>
                                             <h1 className='text-xl'>{user?.name}</h1>
                                         </div>
-                                        {/* <div className="rating rating-sm py-1 w-full text-center d-flex align-items-center  justify-content-center">
-                                            <FaStar className='text-warning' />
-                                            <FaStar className='text-warning' />
-                                            <FaStar className='text-warning' />
-                                            <FaStar className='text-warning' />
-                                            <FaStar className='text-warning' /> <span> User rating</span>
-                                        </div>
-                                        <div className="rating rating-sm py-1 w-full text-center d-flex align-items-center  justify-content-center">
-                                            <FaStar className='text-warning' />
-                                            <FaStar className='text-warning' />
-                                            <FaStar className='text-warning' /><span> Provider</span>
-                                            
-                                        </div> */}
+
                                         <div>
-                                            {/* User Rating */}
-                                            <div className="rating rating-sm py-1 w-full text-center d-flex align-items-center justify-content-center">
-                                                {renderStars(userRating, 5, handleUserRatingClick)}
+                                        <div className="rating rating-sm py-3 w-full text-center d-flex align-items-center  ">
+                                                {renderStars( user?.ratings.map((r) =>{
+                                                    return r.rating
+                                                }), 5,)}
                                                
-                                                <span className='mx-2 p-0 px-3 bg-green rounded-1 text-white'>{userRating}</span>
-                                                <span > User</span>
+                                                {/* <span className='btn ms-2 p-0 px-3 bg-green text-white'>{userRating}</span> */}
+                                                <span className='btn ms-2 p-0 px-3 bg-green text-white'>{
+                                                user?.ratings.map((r) =>{
+                                                    return r.rating
+                                                })
+                                                }</span>
+                                               
                                             </div>
+                                             <div className=" rating rating-sm d-flex align-items-center">
+                                                                <FaStar className='text-warning' />
+                                                                <FaStar className='text-warning' />
+                                                                <FaStar className='text-warning' />
+                                                                <FaStar className='' />
+                                                                <FaStar className='' />
+                                                                <span className='btn ms-2 p-0 px-3 bg-green text-white'>
+                                                                3
+                                                            </span>
+                                                            </div>
+                                                            
 
                                             {/* Provider Rating */}
-                                            <div className="rating rating-sm py-1 w-full text-center d-flex align-items-center justify-content-center">
+                                            {/* <div className="rating rating-sm py-1 w-full text-center d-flex align-items-center justify-content-center">
                                                 {renderStars(providerRating, 5, handleProviderRatingClick)}
                                                 <span className=' mx-2 p-0 px-3 bg-green rounded-1 text-white'>{providerRating}</span>
                                                 <span> Provider</span>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>

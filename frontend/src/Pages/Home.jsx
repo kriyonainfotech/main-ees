@@ -39,7 +39,7 @@ const Home = () => {
 //   }
 //   return result;
 // };
-function processCategoriesAndBanners(categories, BannerImage , categoryGroupSize = 10, bannerGroupSize = 9) {
+function processCategoriesAndBanners(categories, BannerImage , categoryGroupSize = 10, bannerGroupSize = 7) {
   const groupedResult = []; // Array of grouped categories and banners
   let i = 0; // Pointer for categories
   let j = 0; // Pointer for banners

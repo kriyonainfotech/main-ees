@@ -9,35 +9,34 @@ import BannerAdd from './ProfileBanner/BannerAdd';
 import AllBannners from './ProfileBanner/AllBannners';
 import { UserContext } from '../UserContext';
 
-const backend_API = import.meta.env.VITE_API_URL; 
+const backend_API = import.meta.env.VITE_API_URL;
 const Profile = () => {
     const { user } = useContext(UserContext);
     const [userRating, setUserRating] = useState(() => {
-            const savedRating = localStorage.getItem("userRating");
-            return savedRating ? JSON.parse(savedRating) : 0; // Default to 0 if no rating is stored
-          });
+        const savedRating = localStorage.getItem("userRating");
+        return savedRating ? JSON.parse(savedRating) : 0; // Default to 0 if no rating is stored
+    });
     const navigate = useNavigate();
-      // Handle user rating click
-  const handleUserRatingClick = (rating) => {
-    setUserRating(rating);
-    localStorage.setItem("userRating", JSON.stringify(rating)); // Store user rating in localStorage
-  };
+    // Handle user rating click
+    const handleUserRatingClick = (rating) => {
+        setUserRating(rating);
+        localStorage.setItem("userRating", JSON.stringify(rating)); // Store user rating in localStorage
+    };
 
-  // Render stars for the rating
-  const renderStars = (rating, maxRating = 5, onClick) => {
-    const stars = [];
-    for (let i = 1; i <= maxRating; i++) {
-      stars.push(
-        <FaStar
-          key={i}
-          className={` ${i <= rating ? "text-warning" : ""}`}
-          onClick={() => onClick(i)}
-          style={{ cursor: "pointer" }}
-        />
-      );
-    }
-    return stars;
-  };
+    // Render stars for the rating
+    const renderStars = (rating, maxRating = 5,) => {
+        const stars = [];
+        for (let i = 1; i <= maxRating; i++) {
+            stars.push(
+                <FaStar
+                    key={i}
+                    className={` ${i <= rating ? "text-warning" : ""}`}
+                    style={{ cursor: "pointer" }}
+                />
+            );
+        }
+        return stars;
+    };
 
     return (
         <>
@@ -81,14 +80,21 @@ const Profile = () => {
                                                 <p className='text-gray'>Your Bussiness Id :</p>
                                                 <span className='py-2'> {user?._id}</span>
                                                 <h6 className='text-gray py-3'>Bussiness Category <PiShoppingBagLight className='inline-block' /></h6>
-                                                {user?.businessCategory ? (<div className='btn w-50  d-flex justify-content-center text-uppercase rounded-md text-white bg-orange py-2'>{user.businessCategory}</div>) : (<></>) }
+                                                {user?.businessCategory ? (<div className='btn w-50  d-flex justify-content-center text-uppercase rounded-md text-white bg-orange py-2'>{user.businessCategory}</div>) : (<></>)}
 
-                                                <div className="rating rating-sm py-1 w-full text-center d-flex align-items-center justify-content-center">
-                                                {renderStars(userRating, 5, handleUserRatingClick)}
-                                                {/* <span> User rating: {userRating}</span> */}
-                                                <span className='btn ms-2 p-0 px-3 bg-green text-white'>{userRating}</span>
-                                            </div>
-                                                  <BannerAdd/>
+                                                <div className="rating rating-sm py-3 w-full text-center d-flex align-items-center  ">
+                                                    {renderStars(user?.ratings.map((r) => {
+                                                        return r.rating
+                                                    }), 5,)}
+
+                                                    {/* <span className='btn ms-2 p-0 px-3 bg-green text-white'>{userRating}</span> */}
+                                                    <span className='btn ms-2 p-0 px-3 bg-green text-white'>{
+                                                        user?.ratings.map((r) => {
+                                                            return r.rating
+                                                        })
+                                                    }</span>
+                                                </div>
+                                                <BannerAdd />
                                             </div>
                                         </div>
                                     </div>
@@ -100,7 +106,7 @@ const Profile = () => {
                 </div>
             </section>
 
-            <AllBannners/>
+            <AllBannners />
 
         </>
     )
