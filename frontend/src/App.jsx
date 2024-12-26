@@ -22,6 +22,7 @@
   import MangeAdmin from "./components/MangeAdmin";
   import Dashboard from "./adminPages/Dashboard";
   import GetAdmin from "./components/GetAdmin";
+import Wallete from "./Pages/Wallete";
 
   export default function App() {
 
@@ -50,6 +51,7 @@
             <Route path="/register" element={<Registration />} />
             <Route path="/registernext" element={<RegisterNextPage />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/wallete" element={<Wallete />} />
 
             {/* Admin Routes */}         
             {/* <Route element={<GetAdmin/>}> */}

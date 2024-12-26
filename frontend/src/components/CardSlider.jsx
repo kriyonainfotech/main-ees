@@ -79,7 +79,8 @@ const CardSlider = ({BannerImage,setBannerImage}) => {
         }
 
     };
-    const GetBanner = async() =>{
+  
+  const GetBanner = async() =>{
         try {
             const response = await axios.get(`${backend_API}/banner/getAllBanners`, {
                 headers: {
@@ -102,7 +103,6 @@ const CardSlider = ({BannerImage,setBannerImage}) => {
     useEffect(()=>{
         GetBanner()
     },[])
-
     return (
         <>
             <section>

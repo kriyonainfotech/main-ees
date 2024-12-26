@@ -37,10 +37,11 @@ const BannerAdd = () => {
           );
         console.log(response.data)
         alert("Banner Added Successfully")
-        if (response.status === 200) {    
-        alert("Banner Added Successfully")
         setImage(null);
         setPreview(null);
+        // alert("Banner Added Successfully")
+        if (response.status === 200) {    
+       
         }
     } catch (error) {
         console.error("Error details:", error);

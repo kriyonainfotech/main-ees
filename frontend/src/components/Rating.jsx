@@ -53,8 +53,10 @@ const Rating = ({ serviceProviderId }) => {
             );
 
             if (response.status === 200) {
-                setProviderRating(0);
-                setComment("");
+                // setProviderRating(0);
+                // setComment("");
+                console.log(response.data);
+                
                 localStorage.removeItem("providerRating"); // Clear stored rating after submission
                 alert("Rating submitted successfully.");
             } else {

@@ -1,48 +1,127 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCoverflow, Navigation } from 'swiper/modules';
+import { ArrowLeft, ArrowRight } from 'phosphor-react';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import "../assets/Banner/Banner.css";
+import axios from 'axios';
+import OfferModal from './OfferModal';
 
-const Benner = () => {
-    const banners = [
-        {
-            id: 1,
-            img: "https://img.freepik.com/free-vector/flat-design-business-success-horizontal-banner_23-2149811817.jpg?ga=GA1.1.897959581.1731651336&semt=ais_hybrid"
+const backend_API = import.meta.env.VITE_API_URL;
+
+const Benner = ({ BannerImage, setBannerImage }) => {
+     
+    const token = JSON.parse(localStorage.getItem('token'))
+    const [BannerUser, setBannerUser] = useState([])
+       
+  // Function to fetch banners from the API
+  const GetBanner = async () => {
+    try {
+      const response = await axios.get(`${backend_API}/banner/getAllBanners`, {
+        headers: {
+          'Content-Type': 'application/json',
         },
-        {
-            id: 2,
-            img: "https://img.freepik.com/free-vector/flat-design-business-workshop-sale-banner_23-2149397516.jpg?ga=GA1.1.897959581.1731651336&semt=ais_hybrid"
+      });
+
+      if (response.status === 200) {
+        const data = await response.data;
+        // console.log("Fetched banners:", data);
+        setBannerImage(data.banners); // Update BannerImage state with fetched banners
+      }
+    } catch (error) {
+      console.error("Error fetching banners:", error);
+    }
+  };
+  // Fetch banners on component mount
+  useEffect(() => {
+    GetBanner();
+  }, []);
+
+  const henleClick =async(userId) =>{
+    // alert(userId)
+    try {
+        const response = await axios.get(`${backend_API}/banner/getUserByBanner`, {
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
-        {
-            id: 3,
-            img: "https://img.freepik.com/free-vector/flat-design-business-success-horizontal-banner_23-2149811833.jpg?t=st=1733402004~exp=1733405604~hmac=02d5d5f9a8a3f9c15adcea107b45171bf6603b1579b15291bca7a49abb2e9370&w=826"
+            params: {
+                userId, // Send the userId as a query parameter
+            },
+        });
+        const data = await response.data;
+        // console.log(data);
+        setBannerUser(data.banner)
+       
+        if (response.status === 200) {
+            console.log(data, "data Modal banner");
         }
-    ]
-  
-    return (
-        <>
-            <section className='my-16'>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-12 d-flex flex-wrap">
-                            {
-                                banners.map((b, i) => {
-                                    return (
-                                        <div key={++i} className="col-12 col-md-6 col-lg-4 p-2">
-                                            <div className="img">
-                                                <img src={b.img} alt="" />
-                                            </div>
+    } catch (error) {
+        console.log(error);
+    }
+  }
+  return ( <>
+ 
+    <section className="px-3 py-5">
+     <div className="container">
+     <div className="slider-container">
+        <Swiper
+          effect={'coverflow'}
+          grabCursor={true}
+          centeredSlides={true}
+          loop={true} // Infinite loop
+          slideToClickedSlide={true} // Center the clicked slide
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          slidesPerView={'auto'}
+          breakpoints={{
+            320: { slidesPerView: 3, spaceBetween: -30 },
+            640: { slidesPerView: 3, spaceBetween: 30 },
+            768: { slidesPerView: 3, spaceBetween: -30 },
+            1024: { slidesPerView: 5, spaceBetween: -30 },
+          }}
+          coverflowEffect={{
+            rotate: 0,
+            stretch: -55,
+            depth: 150,
+            modifier: 1.2,
+            slideShadows: false,
+          }}
+          navigation={{
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+            clickable: true,
+          }}
+          modules={[EffectCoverflow, Navigation]}
+        >
+          {BannerImage.map((image, index) => (
+            <SwiperSlide key={index}>
+              <img
+                src={image.imageUrl}
+                alt={image.alt || `Slide ${index + 1}`}
+                onClick={() => henleClick(image.userId)} 
+                data-bs-toggle="modal" data-bs-target="#exampleModal"
+              />
+            </SwiperSlide>
+          ))}
+          <div className="slider-controler">
+            <div className="swiper-button-prev">
+              <ArrowLeft size={20} />
+            </div>
+            <div className="swiper-button-next">
+              <ArrowRight size={20} />
+            </div>
+          </div>
+        </Swiper>
+      </div>
+     </div>
+    </section>
+    <OfferModal BannerUser={BannerUser}/>
+    </>
+  );
+};
 
-                                        </div>
-                                    )
-                                })
-                            }
-
-
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </>
-    )
-}
-
-export default Benner
+export default Benner;

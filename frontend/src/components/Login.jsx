@@ -44,6 +44,7 @@ const Login = () => {
                 localStorage.setItem('token', JSON.stringify(response.data.token))
                 localStorage.setItem("Users",JSON.stringify(response.data.user))
                 navigate("/")
+                toast("Login Successful")
                 console.log( response.data.message ,"Login Successful...");
             }
         } catch (error) {
