@@ -8,5 +8,4 @@ routes.use("/banner", require("./bannerRoutes"));
 routes.use("/category", require("./categoryRoutes"));
 routes.use("/user", require("./ratingRoute"));
 routes.use("/api", require("./referralRoute"));
-routes.use("/admin", require("../routes/adminRoute"));
 module.exports = routes;
