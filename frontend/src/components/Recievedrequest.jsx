@@ -147,7 +147,7 @@ const Recievedrequest = ({ recievedRequest, isReceiverAvailable, setIsReceiverAv
                                                             src={receive?.user?.profilePic || "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/220px-User_icon_2.svg.png"}
                                                             alt="Movie" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
                                                     </div>
-                                                    <span className='bg-success position-absolute rounded-full top-5 end-5  p-1 text-sm text-white px-2'>open</span>
+                                                    <span className={`position-absolute rounded-full top-5 end-5  p-1 text-sm text-white px-2 ${receive?.user?.userstatus === "available" ? "bg-green" : "bg-orange"}`}>{receive?.user?.userstatus}</span>
                                                 </div>
                                                 <div className="p-3 pt-0 col-7 col-md-12 d-flex align-items-center">
                                                     <div className='w-full '>

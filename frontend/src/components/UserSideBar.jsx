@@ -32,7 +32,7 @@ const UserSideBar = () => {
       id: 4,
       title: 'wallete',
       icon: <FaWallet />,
-      path: '/admin/card',
+      path: '/wallete',
     }
 
   ]

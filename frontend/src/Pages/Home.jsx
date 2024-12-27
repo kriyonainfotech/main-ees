@@ -16,7 +16,7 @@ const Home = () => {
   const [auth, setAuth] = useState(false);
     const navigate = useNavigate();
  
-    console.log(BannerImage,"bannerImg");
+    // console.log(BannerImage,"bannerImg");
     
  // Function to fetch categories from the backend API
  const fetchCategories = async () => {
@@ -39,7 +39,7 @@ const Home = () => {
 //   }
 //   return result;
 // };
-function processCategoriesAndBanners(categories, BannerImage , categoryGroupSize = 10, bannerGroupSize = 7) {
+function processCategoriesAndBanners(categories, BannerImage , categoryGroupSize = 15, bannerGroupSize = 10) {
   const groupedResult = []; // Array of grouped categories and banners
   let i = 0; // Pointer for categories
   let j = 0; // Pointer for banners
@@ -64,9 +64,9 @@ useEffect(() => {
 
 // Split the categories into groups of 10
 // const groupedCategories = chunkArray(categories, 10);
-const groupedCategoriesAndBanners = processCategoriesAndBanners(categories, BannerImage, 10, 9);
+const groupedCategoriesAndBanners = processCategoriesAndBanners(categories, BannerImage, 15, 10);
 
-console.log(groupedCategoriesAndBanners,"groups");
+// console.log(groupedCategoriesAndBanners,"groups");
 
 
 
@@ -91,7 +91,6 @@ console.log(groupedCategoriesAndBanners,"groups");
           auth ? <Card /> : <></>
         }
         {/* <Card />   */}
-        <CardSlider BannerImage ={BannerImage} setBannerImage = {setBannerImage}/>
         {/* <div className=''>
             {groupedCategories.map((group, index) => (
               <React.Fragment key={index}>
@@ -105,8 +104,9 @@ console.log(groupedCategoriesAndBanners,"groups");
                 <React.Fragment key={index}>
                     {/* Render Categories */}
                     {/* <CardSlider BannerImage={group.BannerImage} setBannerImage = {setBannerImage} /> */}
+                   <Benner BannerImage={group.BannerImage} setBannerImage = {setBannerImage}/>
+
                     <ServieceCategories categories={group.categories} />
-                   <Benner/>
                 </React.Fragment>
             ))}
         </div>
