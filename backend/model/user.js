@@ -116,6 +116,26 @@ const userSchema = new mongoose.Schema(
       type: Number, // Store the average rating for the user
       default: 0,
     },
+    // New fields for referral system
+    referralCode: { type: String, unique: true },
+    referredBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    referrals: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    earnings: { type: Number, default: 0 },
+    earningsHistory: [
+      {
+        amount: { type: Number, required: true },
+        sourceUser: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        date: { type: Date, default: Date.now },
+      },
+    ],
   },
 
   { timestamps: true }
