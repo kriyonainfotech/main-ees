@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState ,useEffect} from 'react'
 import logo from "../../public/ees-logo.png"
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 // import { categories } from '../ServiceCategory'
 
@@ -77,8 +78,9 @@ const RegisterNextPage = () => {
       const data = await response.data;
       console.log(data);
       if (response.status === 200) {
-        localStorage.setItem("Users", JSON.stringify(data.user))
+        // localStorage.setItem("Users", JSON.stringify(data.user))
         // localStorage.setItem("Users",token)
+         toast("Register Successful")
         navigete('/login');
         console.log('Register successful!');
       } else {

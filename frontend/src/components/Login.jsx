@@ -1,29 +1,29 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import logo from "../../public/ees-logo.png"
+import { UserContext } from '../UserContext';
 
 const backend_API = import.meta.env.VITE_API_URL; 
 
-// console.log(backend_API,"api");
-
-// const backend_API = "https://ees-backend.vercel.app"
 console.log(backend_API);
 
-
-
-
 const Login = () => {
+   const { user } = useContext(UserContext);
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
     const isAuthenticated = localStorage.getItem("token");
-    if (isAuthenticated) {
+    if (user) {
       // Redirect to a protected page if already logged in
       return <Navigate to="/" />;
   }
+  //   if (isAuthenticated) {
+  //     // Redirect to a protected page if already logged in
+  //     return <Navigate to="/" />;
+  // }
 
 
     const handleSubmit = async(e) => {
@@ -39,10 +39,8 @@ const Login = () => {
             // console.log( response.data.message ,"Login Successful");
             console.log( response.data.message ,"Login response");
             console.log(response.data, "data");
-            // console.log(response.data.token, "token");
             if (response.status === 200) {   
                 localStorage.setItem('token', JSON.stringify(response.data.token))
-                localStorage.setItem("Users",JSON.stringify(response.data.user))
                 navigate("/")
                 toast("Login Successful")
                 console.log( response.data.message ,"Login Successful...");

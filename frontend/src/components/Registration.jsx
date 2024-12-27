@@ -1,18 +1,14 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import logo from "../../public/ees-logo.png"
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import {
-  CitySelect,
-  CountrySelect,
-  StateSelect,
- 
-} from "react-country-state-city";
 import "react-country-state-city/dist/react-country-state-city.css";
+import { UserContext } from '../UserContext';
 
 // 
 // for address 
 function Registration() {
+    const { user } = useContext(UserContext);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,13 +26,30 @@ function Registration() {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({});
+  const [referralCode, setReferralCode] = useState(null); // For referral code
+
   const isAuthenticated = localStorage.getItem("token");
   const navigete = useNavigate();
-  if (isAuthenticated) {
+  if (user) {
     // Redirect to a protected page if already logged in
     return <Navigate to="/" />;
 
   }
+  // if (isAuthenticated) {
+  //   // Redirect to a protected page if already logged in
+  //   return <Navigate to="/" />;
+
+  // }
+
+
+  useEffect(() => {
+    // Extract referral code from URL
+    const queryParams = new URLSearchParams(location.search);
+    const code = queryParams.get("referralCode");
+    if (code) setReferralCode(code);
+
+    // Fetch categories
+  }, []);
   const validatePassword = (password) => {
     const easy = /^[a-zA-Z0-9]{6,}$/; // Easy: At least 6 characters
     const medium = /^(?=.*[A-Z])(?=.*[0-9]).{6,}$/; // Medium: At least 6 chars, 1 uppercase, 1 number
@@ -138,9 +151,10 @@ function Registration() {
     setAddress(newadd)
     console.log(address, "address");
 
-    navigete("/registernext", { state: { name: name, email: email, password: password, confirmpassword: password, phone: phone, address: newadd } })
+    navigete("/registernext", { state: { name: name, email: email, password: password, confirmpassword: password, phone: phone, address: newadd, referralCode } })
 
   };
+
 
   return (
     <>
@@ -188,8 +202,17 @@ function Registration() {
             </div> */}
 
             <form action="" onSubmit={handleSubmits} className='py-5'>
-            
+            <div className='px-16'>
+                <input
+                      type="text"
+                      value={referralCode}
+                      onChange={(e) => setReferralCode(e.target.value)}
+                      className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" placeholder="Name" />
+                    {errors.name && <span className="error text-orange text-orange text-sm">{errors.name}</span>}
+                   
+                </div>
               <div className="col-12 d-flex flex-wrap justify-content-center p-5">
+                
                 <div className="col-12 col-lg-6 p-1">
                   <div className='px-2'>
                     <input
@@ -248,16 +271,6 @@ function Registration() {
                           value={city}
                           onChange={(e) => setCity(e.target.value)}
                           className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="text" placeholder="City" />
-
-                        {/* <CitySelect
-                          countryid={country}
-                          stateid={state}
-                          onChange={(e) => {
-                            console.log(e);
-                          }}
-                          value={city}
-                          placeHolder="Select City"
-                        /> */}
                         {errors.city && <span className="error text-orange text-orange text-sm">{errors.city}</span>}
                       </div>
                       <div className="col-12 col-lg-6 p-1">
@@ -265,15 +278,7 @@ function Registration() {
                           value={state}
                           onChange={(e) => setState(e.target.value)}
                           className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="text" placeholder="State" />
-                        {/*                       
-                        <StateSelect
-                          countryid={country}
-                          onChange={(e) => {
-                            setState(e.id);
-                          }}
-                          value={state}
-                          placeHolder="Select State"
-                        /> */}
+                        
                         {errors.state && <span className="error text-orange text-orange text-sm">{errors.state}</span>}
                       </div>
                       <div className="col-12 col-lg-6 p-1 ">
@@ -281,14 +286,6 @@ function Registration() {
                           value={country}
                           onChange={(e) => setCountry(e.target.value)}
                           className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-2" type="text" placeholder="Country" />
-
-                        {/* <CountrySelect
-                          onChange={(e) => {
-                            setCountry(e.id);
-                          }}
-                          placeHolder="Select Country"
-                          value={country}
-                        /> */}
                         {errors.country && <span className="error text-orange text-orange text-sm">{errors.country}</span>}
                       </div>
 
