@@ -136,8 +136,18 @@ const userSchema = new mongoose.Schema(
         date: { type: Date, default: Date.now },
       },
     ],
-  },
 
+    paymentHistory: [
+      {
+        paymentId: String, // Razorpay Payment ID
+        orderId: String, // Razorpay Order ID or Payment Link ID
+        amount: Number, // Amount paid
+        currency: String, // Currency of the transaction
+        status: String, // Payment status (e.g., "paid", "failed")
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+  },
   { timestamps: true }
 );
 

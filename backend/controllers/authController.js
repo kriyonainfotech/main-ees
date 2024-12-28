@@ -558,20 +558,21 @@ const setUserStatus = async (req, res) => {
   try {
     const userId = req.user.id; // Assuming the user ID is in `req.user` after authentication
 
-    const {  userstatus } = req.body;
+    const { userstatus } = req.body;
 
     // Validate status
-    if (! userstatus || !['available', 'unavailable'].includes( userstatus)) {
+    if (!userstatus || !["available", "unavailable"].includes(userstatus)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid status value. Please choose 'available' or 'unavailable'.",
+        message:
+          "Invalid status value. Please choose 'available' or 'unavailable'.",
       });
     }
 
     // Update user status in the database
     const updatedUserstatus = await UserModel.findByIdAndUpdate(
       userId,
-      {  userstatus },
+      { userstatus },
       { new: true, runValidators: true } // Ensure validation is applied
     );
 
@@ -586,7 +587,7 @@ const setUserStatus = async (req, res) => {
     // Respond with success
     return res.status(200).json({
       success: true,
-      message: `User status updated to ${ userstatus}`,
+      message: `User status updated to ${userstatus}`,
       user: updatedUserstatus,
     });
   } catch (error) {
@@ -598,7 +599,6 @@ const setUserStatus = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   registerUser,
@@ -613,5 +613,5 @@ module.exports = {
   updateProfile,
   deleteUser,
   UpdateUser,
-  setUserStatus
+  setUserStatus,
 };
