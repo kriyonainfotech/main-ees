@@ -12,16 +12,13 @@ import { UserContext } from '../UserContext';
 const backend_API = import.meta.env.VITE_API_URL;
 const Profile = () => {
     const { user } = useContext(UserContext);
+    const [linkCopied, setLinkCopied] = useState(false);
+
     const [userRating, setUserRating] = useState(() => {
         const savedRating = localStorage.getItem("userRating");
         return savedRating ? JSON.parse(savedRating) : 0; // Default to 0 if no rating is stored
     });
     const navigate = useNavigate();
-    // Handle user rating click
-    const handleUserRatingClick = (rating) => {
-        setUserRating(rating);
-        localStorage.setItem("userRating", JSON.stringify(rating)); // Store user rating in localStorage
-    };
 
     // Render stars for the rating
     const renderStars = (rating, maxRating = 5,) => {
@@ -37,7 +34,12 @@ const Profile = () => {
         }
         return stars;
     };
-
+    const referralLink =`https://ess-frontend-eight.vercel.app/register?referralCode=${user?.referralCode}`
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(referralLink);
+        setLinkCopied(true);
+        setTimeout(() => setLinkCopied(false), 2000);
+      };
     return (
         <>
             <AdminNavbar />
@@ -77,8 +79,14 @@ const Profile = () => {
                                         </div>
                                         <div className="col-12 col-md-6 d-flex justify-content-md-end justify-content-start">
                                             <div className='p-5 w-full'>
-                                                <p className='text-gray'>Your Bussiness Id :</p>
-                                                <span className='py-2'> {user?._id}</span>
+                                                {/* <input type="text" value={} readOnly /> */}
+                                                <p className='text-gray'>Your Reffrele Link :</p>
+                                                <Link  onClick={copyToClipboard}>{referralLink}</Link>
+                                                {linkCopied && <p>Link copied</p>}
+                                                {/*
+                                                <a href={`https://ess-frontend-eight.vercel.app/register`} target='_blank'>https://ess-frontend-eight.vercel.app/register?referralCode={user?.referralCode}</a>
+                                                */}
+                                                {/* <span className='py-2'> {user?.referralCode}</span> */}
                                                 <h6 className='text-gray py-3'>Bussiness Category <PiShoppingBagLight className='inline-block' /></h6>
                                                 {user?.businessCategory ? (<div className='btn w-50  d-flex justify-content-center text-uppercase rounded-md text-white bg-orange py-2'>{user.businessCategory}</div>) : (<></>)}
 

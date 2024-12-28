@@ -23,34 +23,32 @@
   import Dashboard from "./adminPages/Dashboard";
   import GetAdmin from "./components/GetAdmin";
 import Wallete from "./Pages/Wallete";
+import { UserProvider } from "./UserContext";
 
   export default function App() {
 
     return (
       <>
-  
+      <UserProvider>
         <ToastContainer />
         <Router>
           <Routes>
-            {/* protected route */}
-            <Route element={<ProtectedRoute />}>
+          <Route path="/register" element={<Registration />} />
+            <Route path="/registernext" element={<RegisterNextPage />} />
+            <Route path="/login" element={<Login />} />
+              {/* protected route */}
+              <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<Profile />} />
               <Route path="/editprofile" element={<EditProfile />} />
               <Route path="/serviceDetail" element={ <ServiceDetail/>} />
               <Route path="/profile" element={<Profile />} />
               {/* <Route path="/admin" element={<Dashboard />} /> */}
             </Route>
+            <Route path="/" element={<Home />} />
             <Route path="/servises" element={ <Services/>} />
-
             {/* work  */}
             <Route path="/work" element={ <Work/>} />
             <Route path="/work/sendrequest" element={ <Senedrequest/>} />
-
-            <Route path="/" element={<Home />} />
-            
-            <Route path="/register" element={<Registration />} />
-            <Route path="/registernext" element={<RegisterNextPage />} />
-            <Route path="/login" element={<Login />} />
             <Route path="/wallete" element={<Wallete />} />
 
             {/* Admin Routes */}         
@@ -62,12 +60,11 @@ import Wallete from "./Pages/Wallete";
             <Route path="/admin/card" element={<Card />} />
             <Route path="/admin/manageCategory" element={<ManageCatagory />} />
             {/* </Route> */}
-
-
           </Routes>
         </Router>
 
-    
+        </UserProvider>
+          
       </>
     )
   }
