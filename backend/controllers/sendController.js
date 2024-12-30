@@ -2,11 +2,13 @@ const admin = require("../config/firebase");
 // Endpoint to send notifications
 const sendNotification = async (req, res) => {
   const { senderName, fcmToken, title, message } = req.body;
-
+  console.log(req.body, "send req");
+  
   if (!fcmToken || !title || !message || !senderName) {
     return res.status(400).json({ error: "Missing required fields." });
   }
-
+  console.log(req.body, "send req");
+  
   const notificationPayload = {
     notification: {
       title: `${senderName} says: ${title}`,
