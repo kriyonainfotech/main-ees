@@ -254,17 +254,19 @@ const registerUserweb = async (req, res) => {
     });
   }
 };
-const loginUserweb = async (req, res) => {
+const loginUserweb = async (req, res) => { 
   try {
     console.log(req.body);
 
-    const { phone, password } = req.body;
+    const { phone, password, fcmToken } = req.body; // Include fcmToken in the request body
     if (!phone || !password) {
       return res.status(400).send({
         success: false,
         message: "Phone and Password are required",
       });
     }
+
+    // Check if user exists
     const user = await UserModel.findOne({ phone });
     if (!user) {
       return res.status(400).json({
@@ -280,6 +282,12 @@ const loginUserweb = async (req, res) => {
         success: false,
         message: "Invalid Phone or Password",
       });
+    }
+
+    // Update FCM token if provided
+    if (fcmToken) {
+      user.fcmToken = fcmToken; // Ensure your UserModel schema has an `fcmToken` field
+      await user.save();
     }
 
     // Generate token and set cookie
@@ -308,6 +316,7 @@ const loginUserweb = async (req, res) => {
     });
   }
 };
+
 const getAdmin = async (req, res) => {
   try {
     res.status(200).send({
@@ -329,7 +338,7 @@ const getalluser = async (req, res) => {
     const user = await UserModel.find({}).select(
       "-received_requests -sended_requests"
     );
-    console.log(user);
+    // console.log(user);
 
     return res.status(200).json({
       success: true,
@@ -371,18 +380,22 @@ const getUser = async (req, res) => {
 };
 const logout = async (req, res) => {
   try {
-    // Clear the token cookie
+    // Clear the refreshToken cookie
     res.clearCookie("refreshToken", {
-      httpOnly: true, // Ensure cookie is secure and inaccessible via JavaScript
-      secure: true, // Use secure cookies in production
+      httpOnly: true,
+      secure: true, // Use true in production (HTTPS)
       sameSite: "lax",
+      path: "/", // Match path when the cookie was set
     });
+
+    console.log("Logout successful");
 
     return res.status(200).send({
       success: true,
       message: "Logout successful",
     });
   } catch (error) {
+    console.error("Logout error:", error);
     return res.status(500).send({
       success: false,
       message: "An error occurred during logout",
@@ -390,6 +403,7 @@ const logout = async (req, res) => {
     });
   }
 };
+
 
 const updateProfile = async (req, res) => {
   try {
@@ -606,6 +620,7 @@ const setUserStatus = async (req, res) => {
     });
   }
 };
+
 const updateRoleByEmail = async (req, res) => {
   try {
     const { email, role } = req.body;
