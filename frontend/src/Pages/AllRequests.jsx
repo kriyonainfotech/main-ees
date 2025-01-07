@@ -65,7 +65,7 @@ const AllRequests = () => {
 
                         {/* Loading state */}
                         {loading ? (
-                            <div>Loading...</div>
+                            <></>
                         ) : (
                             <div className="col-12 flex flex-wrap py-2">
                                 {requests.map((req) => (

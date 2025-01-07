@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import acService from '../../public/service-icons/ac service.png';
 import { toast } from 'react-toastify';
 import { LuUserPen } from 'react-icons/lu';
-import Rating from './Rating';
+import AddRating from './Profile/AddRating';
 
 const backend_API = import.meta.env.VITE_API_URL;
 
@@ -129,7 +129,7 @@ const Recievedrequest = ({ recievedRequest, isReceiverAvailable, setIsReceiverAv
                                         <div className='w-full'>
                                             <div className='d-flex flex-column flex-md-row justify-content-start justify-content-md-between'>
                                                 <div className="rating  rating-sm py-3 w-full text-center d-flex align-items-center">
-                                                    {renderStars(receive?.user?.ratings || [], 5)}
+                                                    {renderStars(receive?.user?.ratings || [], 10)}
                                                     <span className=' ms-2 p-0 px-3 '>{receive?.user?.ratings?.length ? receive?.user?.ratings[0].rating : 0}</span>
                                                 </div>
                                                 <h6 className='d-flex align-items-center text-orange m-0 text-sm w-100 justify-content-start justify-content-md-end'>
@@ -160,7 +160,7 @@ const Recievedrequest = ({ recievedRequest, isReceiverAvailable, setIsReceiverAv
                                                     </Link>
                                                 )}
                                             </div>
-                                            <Rating serviceProviderId={serviceProviderId} />
+                                            <AddRating serviceProviderId={serviceProviderId} />
                                         </div>
                                     </div>
                                 </div>

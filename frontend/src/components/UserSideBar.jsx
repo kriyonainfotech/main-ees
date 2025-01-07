@@ -14,7 +14,7 @@ const UserSideBar = () => {
    const sidebarMenu = [
      { title: 'Profile', icon: <FaUser />, path: '/profile' },
      { title: 'Wallete', icon: <FaWallet />, path: '/wallete' },
-     { title: 'Team', icon: <FaUserFriends />, path: '/' },
+     { title: 'Team', icon: <FaUserFriends />, path: '/team' },
      { title: 'Customer Care', icon: <FaPhone />, path: '/' }
    ];
 

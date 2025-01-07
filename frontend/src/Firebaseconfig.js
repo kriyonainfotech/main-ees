@@ -32,7 +32,7 @@ export const getFcmToken = async () => {
     });
 
     if (fcmToken) {
-      console.log("FCM Token:", fcmToken);
+      // console.log("FCM Token:", fcmToken);
       return fcmToken;
     } else {
       console.warn("No FCM token received. Ensure notifications are enabled.");

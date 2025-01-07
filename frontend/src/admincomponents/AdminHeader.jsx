@@ -34,17 +34,13 @@ const AdminHeader = () => {
     }, [token])
 
     useEffect(() => {
-        const handlScroll = () => {
+       
             if (window.scrollY > 0) {
                 setSticky(true)
             } else {
                 setSticky(false)
             }
-        }
-        window.addEventListener('scroll', handlScroll)
-        return () => {
-            window.removeEventListener("scroll", handlScroll)
-        }
+        
     }, [])
 
     return (
@@ -114,7 +110,7 @@ const AdminHeader = () => {
                                 {/* Lazy load UserDropdown */}
                                 {
                                     auth ? (
-                                        <Suspense fallback={<div>Loading...</div>}>
+                                        <Suspense fallback={<></>}>
                                             <UserDropdown />
                                         </Suspense>
                                     ) :

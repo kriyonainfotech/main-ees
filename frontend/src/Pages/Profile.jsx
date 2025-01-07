@@ -2,12 +2,14 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PiShoppingBagLight } from "react-icons/pi";
 import { FaStar } from 'react-icons/fa';
-import UserSideBar from './UserSideBar';
+import UserSideBar from '../components/UserSideBar';
 import AdminNavbar from '../admincomponents/AdminNavbar';
-import BannerAdd from './ProfileBanner/BannerAdd';
-import AllBannners from './ProfileBanner/AllBannners';
+import BannerAdd from '../components/ProfileBanner/BannerAdd';
+import AllBannners from '../components/ProfileBanner/AllBannners';
 import { UserContext } from '../UserContext';
-import ProfileSidebar from './ProfileSidebar';
+import ProfileSidebar from '../components/ProfileSidebar';
+import GetUserRating from '../components/Profile/GetUserRating';
+import CurrentLocation from '../components/Profile/CurrentLocation';
 
 const backend_API = import.meta.env.VITE_API_URL;
 
@@ -25,7 +27,7 @@ const Profile = () => {
     };
 
     // Render stars for the rating
-    const renderStars = (rating, maxRating = 5) => {
+    const renderStars = (rating, maxRating = 10) => {
         const stars = [];
         for (let i = 1; i <= maxRating; i++) {
             stars.push(
@@ -48,7 +50,7 @@ const Profile = () => {
         <>
             <AdminNavbar />
             <UserSideBar />
-            <ProfileSidebar/>
+            <ProfileSidebar />
             <div className='my-24'>
                 <section className='p-4'>
                     <div className="container">
@@ -66,17 +68,22 @@ const Profile = () => {
                                     <div>
                                         <div className="col-12 d-flex flex-wrap">
                                             <div className="col-12 col-md-6 p-5">
-                                            <div className="rating rating-sm mt-4 py-3 w-full text-center d-flex align-items-center">
-                                                        {renderStars(userRating, 5)}
-                                                        <span className=' ms-2 p-0 px-3'>{userRating.toFixed(1)}</span>
+                                                <div className="rats pt-5">
+                                                    <h2 className="text-sm text-start font-bold">User Rating</h2>
+                                                    <GetUserRating />
+                                                    <div className="rating d-flex  flex-col rating-sm py-2 ">
+                                                        <h2 className=" text-sm font-bold">Provider Rating</h2>
+                                                        <div className='d-flex'>
+                                                            {renderStars(userRating, 10)}
+                                                            <span className=' ms-2 p-0 '>({userRating.toFixed(1)})</span>
+                                                        </div>
                                                     </div>
+
+                                                </div>
                                                 <h2 className="text-3xl font-bold text-gray-700">{user?.name}</h2>
                                                 <h6 className='py-3 text-gray'>{user?.email}</h6>
                                                 <p className='text-gray pb-3'> +91{user?.phone}</p>
-                                                <p className="text-gray pb-3">
-                                                    {user?.address?.area} {user?.address?.city} {user?.address?.state} {user?.address?.country} {user?.address?.pincode}
-                                                </p>
-
+                                                <CurrentLocation user={user} />
                                                 <div className="flex">
                                                     <button onClick={() => navigate(`/editprofile`, { state: user })} className="text-orange py-3 rounded-full font-semibold uppercase text-sm">Edit Profile</button>
                                                 </div>
@@ -92,9 +99,9 @@ const Profile = () => {
                                                         <div className='btn d-flex justify-content-center text-uppercase rounded-md text-white bg-orange py-2'>{user.businessCategory}</div>
                                                     )}
 
-                                                   
+
                                                     <div className='pt-4'>
-                                                <BannerAdd/>
+                                                        <BannerAdd />
                                                     </div>
                                                 </div>
                                             </div>

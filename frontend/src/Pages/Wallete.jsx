@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import AdminNavbar from '../admincomponents/AdminNavbar';
 import UserSideBar from '../components/UserSideBar';
 import TotalWallete from '../components/Wallete/TotalWallete';
-import WalletList from '../components/Wallete/WalletList';
 import ProfileSidebar from '../components/ProfileSidebar';
 
 const Wallete = () => {
@@ -14,7 +13,7 @@ const Wallete = () => {
       <ProfileSidebar/>
 
       {/* Main Section */}
-      <section className="my-40">
+      <section className="mt-40">
         <div className="container">
           <div className="row">
             <div className="wallete text-white">
@@ -35,11 +34,6 @@ const Wallete = () => {
               {/* Wallet Overview */}
               <div className="col-12 mt-3 d-flex flex-wrap p-4 rounded-1 bg-blue align-items-center">
                 <TotalWallete />
-              </div>
-
-              {/* Wallet List */}
-              <div className="col-12 pt-3">
-                <WalletList />
               </div>
             </div>
           </div>

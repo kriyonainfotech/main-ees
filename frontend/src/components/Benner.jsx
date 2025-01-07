@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Navigation, Autoplay } from 'swiper/modules'; // Import Autoplay module
+import { EffectCoverflow, Navigation, Autoplay } from 'swiper/modules';
 import { ArrowLeft, ArrowRight } from 'phosphor-react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -10,11 +10,13 @@ import OfferModal from './OfferModal';
 
 const backend_API = import.meta.env.VITE_API_URL;
 
-const Benner = ({ BannerImage, setBannerImage }) => {
+const Banner = ({ BannerImage, setBannerImage }) => {
     const token = JSON.parse(localStorage.getItem('token'));
-    const [BannerUser, setBannerUser] = useState([]);
+    const [BannerUser, setBannerUser] = useState({});
+    const [offerImage, setOfferImage] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false); // For controlling modal visibility
 
     const GetBanner = async () => {
         setLoading(true);
@@ -33,7 +35,8 @@ const Benner = ({ BannerImage, setBannerImage }) => {
         }
     };
 
-    const handleClick = async (bannerId) => {
+    const handleOfferBanner = async (bannerId,imageUrl) => {
+       
         try {
             const response = await axios.get(`${backend_API}/banner/getUserByBanner/${bannerId}`, {
                 headers: {
@@ -43,6 +46,8 @@ const Benner = ({ BannerImage, setBannerImage }) => {
             });
             if (response.status === 200) {
                 setBannerUser(response.data.user);
+                setOfferImage(imageUrl)
+                setIsModalOpen(true); // Open the modal after fetching user data
             }
         } catch (error) {
             console.error("Error fetching banner user data:", error);
@@ -96,10 +101,8 @@ const Benner = ({ BannerImage, setBannerImage }) => {
                                 <SwiperSlide key={index}>
                                     <img
                                         src={image.imageUrl}
-                                        alt={image.alt || `Slide ${index + 1}`}
-                                        onClick={() => handleClick(image._id)}
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal"
+                                        alt={`Slide ${index + 1}`}
+                                        onClick={() => handleOfferBanner(image._id,image.imageUrl)}
                                     />
                                 </SwiperSlide>
                             ))}
@@ -115,11 +118,11 @@ const Benner = ({ BannerImage, setBannerImage }) => {
                     </div>
                 )}
             </div>
-            <OfferModal BannerUser={BannerUser} />
+
+            {/* Conditionally render the modal */}
+            {isModalOpen && <OfferModal BannerUser={BannerUser} offerImage={offerImage} closeModal={() => setIsModalOpen(false)} />}
         </section>
     );
 };
 
-export default Benner;
-
-
+export default Banner;

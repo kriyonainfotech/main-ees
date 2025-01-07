@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../../UserContext";
+import GetUserRating from "../Profile/GetUserRating";
 
 const backend_API = import.meta.env.VITE_API_URL;
 

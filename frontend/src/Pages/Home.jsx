@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import Card from './Card';
+import React, { useContext, useEffect, useState } from 'react';
+import Card from '../components/Profile/Card';
 import ServieceCategories from '../components/ServieceCategories';
 import Benner from '../components/Benner';
 import AdminNavbar from '../admincomponents/AdminNavbar';
@@ -9,10 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import { getFcmToken, messaging } from '../Firebaseconfig';
 import { onMessage } from 'firebase/messaging';
 import ProfileSidebar from '../components/ProfileSidebar';
+import { UserContext } from '../UserContext';
 
 const backend_API = import.meta.env.VITE_API_URL;
 
 const Home = () => {
+   const { user } = useContext(UserContext);
+       
   const [categories, setCategories] = useState([]);
   const [bannerImage, setBannerImage] = useState([]);
   const [auth, setAuth] = useState(false);
@@ -73,8 +76,8 @@ const Home = () => {
 
   // Set authentication state based on token
   useEffect(() => {
-    setAuth(Boolean(token));  // Simplified check for token existence
-  }, [token]);
+    setAuth(Boolean(user));  // Simplified check for token existence
+  }, [user]);
 
   return (
     <>

@@ -15,14 +15,14 @@ const Logout = () => {
         withCredentials: true, // Required for cookies
       });
 
-      if (response.status === 200) {
+      if (response.status === 200) {  
         toast("Logout Successful...");
         // Clear client-side storage
         localStorage.removeItem('token');
         localStorage.removeItem('Users');
-
         // Redirect to login
         navigate('/login');
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error during logout:", error);

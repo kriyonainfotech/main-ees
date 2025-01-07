@@ -3,27 +3,37 @@ import axios from 'axios';
 
 const backend_API = import.meta.env.VITE_API_URL;
 
-const EditCategory = ({ editcategory }) => {
+const EditCategory = ({ editcategory, fetchCategory }) => {
     const [categoryName, setCategoryName] = useState("");
     const [categoryImg, setCategoryImg] = useState(null);
     const [preview, setPreview] = useState(null);
-    const [loading, setLoading] = useState(false);  // To manage loading state
-    const [error, setError] = useState("");         // To manage error state
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        if (editcategory) {
+            setCategoryName(editcategory.categoryName);
+            setPreview(editcategory.image); // Initial preview
+        }
+    }, [editcategory]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!categoryName || !categoryImg) {
+        if (!categoryName) {
             alert("Please fill all fields");
             return;
         }
 
         const formData = new FormData();
         formData.append("categoryName", categoryName);
-        formData.append("category", categoryImg);
+        if (categoryImg) {
+            formData.append("category", categoryImg); // Append the new image if it exists
+        }
+        formData.append("categorId", editcategory._id);
 
         try {
-            setLoading(true);  // Start loading
+            setLoading(true);
 
             const response = await axios.post(`${backend_API}/category/updateCategory`, formData, {
                 headers: {
@@ -31,45 +41,33 @@ const EditCategory = ({ editcategory }) => {
                 },
             });
 
-            console.log(response.data);
-            alert("Category edited successfully!");
+            if (response.data.success) {
+                alert("Category edited successfully!");
+                fetchCategory();
 
-            // Reset form fields after success
-            setCategoryName("");
-            setCategoryImg(null);
-            setPreview(null);
-            setError(""); // Clear error if any
+                const modalCloseButton = document.querySelector("[data-bs-dismiss='modal']");
+                if (modalCloseButton) modalCloseButton.click();
+
+                setCategoryName("");
+                setCategoryImg(null);
+                setPreview(null);
+                setError("");
+            } else {
+                setError(response.data.message || "Failed to update category. Please try again.");
+            }
 
         } catch (error) {
-            console.error("Error editing category:", error);
-            setError("Failed to update category. Please try again."); // Set error message
+            console.error("Error updating category:", error);
+            setError("Failed to update category. Please try again.");
         } finally {
-            setLoading(false); // End loading
+            setLoading(false);
         }
     };
-
-    useEffect(() => {
-        if (editcategory) {
-            setCategoryName(editcategory.categoryName);
-            setCategoryImg(editcategory.categoryImg || null);
-            if (editcategory.categoryImg) {
-                setPreview(editcategory.categoryImg);
-            }
-        }
-    }, [editcategory]);
-
-    useEffect(() => {
-        return () => {
-            if (preview) {
-                URL.revokeObjectURL(preview); // Clean up the preview URL when component unmounts
-            }
-        };
-    }, [preview]);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > 5000000) { // 5MB limit for images
+            if (file.size > 5000000) {
                 alert("File is too large. Please choose a file less than 5MB.");
                 return;
             }
@@ -79,16 +77,29 @@ const EditCategory = ({ editcategory }) => {
                 return;
             }
 
+            // Clear existing preview
+            if (preview && typeof preview === "string") {
+                URL.revokeObjectURL(preview);
+            }
+
             setCategoryImg(file);
             const newPreview = URL.createObjectURL(file);
-            setPreview(newPreview);
+            setPreview(newPreview); // Update preview with the new image
         }
     };
+
+    useEffect(() => {
+        return () => {
+            if (preview && typeof preview === "string") {
+                URL.revokeObjectURL(preview); // Clean up the preview URL
+            }
+        };
+    }, [preview]);
 
     return (
         <div className="modal-content">
             <div className="modal-header">
-                <h1 className="modal-title fs-5" id="exampleModalLabel">Edit Category</h1>
+                <h1 className="modal-title fs-5">Edit Category</h1>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
             </div>
             <div className="modal-body">
@@ -98,10 +109,8 @@ const EditCategory = ({ editcategory }) => {
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="Category Name"
                             value={categoryName}
                             onChange={(e) => setCategoryName(e.target.value)}
-                            id="category-name"
                         />
                     </div>
                     <div className="mb-3">
@@ -112,7 +121,6 @@ const EditCategory = ({ editcategory }) => {
                         <input
                             type="file"
                             id="file-upload"
-                            name="categoryImg"
                             onChange={handleFileChange}
                             accept="image/*"
                         />

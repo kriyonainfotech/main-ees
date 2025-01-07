@@ -13,7 +13,7 @@ const Senedrequest = ({ sendedRequest, isReceiverAvailable }) => {
     const [status, setStatus] = useState('');
     const token = JSON.parse(localStorage.getItem('token'))
     // Render stars for the rating
-    const renderStars = (rating, maxRating = 5,) => {
+    const renderStars = (rating, maxRating = 10,) => {
         const stars = [];
         for (let i = 1; i <= maxRating; i++) {
             stars.push(
@@ -102,7 +102,7 @@ const Senedrequest = ({ sendedRequest, isReceiverAvailable }) => {
                                                                         <div className=' d-flex align-items-center'>
                                                                             {renderStars(receive?.user?.ratings.map((r) => {
                                                                                 return r.rating
-                                                                            }), 5,)}
+                                                                            }), 10,)}
                                                                             <span className="ps-2 ">{receive?.user?.ratings.map((r) => {
                                                                                 return r.rating
                                                                             })}</span>

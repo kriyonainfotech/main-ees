@@ -42,7 +42,7 @@ export const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider value={{ user, setUser, loading, error }}>
-            {!loading ? children : <div>Loading...</div>} {/* Loading fallback */}
+            {!loading ? children : <></>} {/* Loading fallback */}
         </UserContext.Provider>
     );
 };

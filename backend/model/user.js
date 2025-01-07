@@ -109,7 +109,7 @@ const userSchema = new mongoose.Schema(
           type: Number,
           required: true,
           min: 1,
-          max: 5, // Restrict ratings between 1 and 5
+          max: 10, // Restrict ratings between 1 and 5
         },
         comment: {
           type: String, // Optional feedback
@@ -126,11 +126,7 @@ const userSchema = new mongoose.Schema(
     },
     // New fields for referral system
     referralCode: { type: String, unique: true },
-    referredBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
-    },
+    referredBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     referrals: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     earnings: { type: Number, default: 0 },
     earningsHistory: [

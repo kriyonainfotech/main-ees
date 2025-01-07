@@ -4,7 +4,7 @@ import { FaStar } from 'react-icons/fa';
 
 const backend_API = import.meta.env.VITE_API_URL;
 
-const Rating = ({ serviceProviderId }) => {
+const AddRating = ({ serviceProviderId }) => {
     const token = JSON.parse(localStorage.getItem('token'));
     
     // Check if the token exists before proceeding
@@ -127,4 +127,4 @@ const Rating = ({ serviceProviderId }) => {
     );
 };
 
-export default Rating;
+export default AddRating;
