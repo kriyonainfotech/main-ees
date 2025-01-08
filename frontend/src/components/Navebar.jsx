@@ -8,31 +8,13 @@ const Navebar = () => {
     const token = JSON.parse(localStorage.getItem('token'))
 const[auth,setAuth] = useState(false)
     const [sticky,setSticky] = useState(false);
-    const [theme, setTheme] = useState(localStorage.getItem('theme')?localStorage.getItem('theme'): 'light');
-    const element = document.documentElement;
-    useEffect(() =>{
-        if(theme === 'dark'){
-            element.classList.add('dark');
-            localStorage.setItem("theme","dark")
-            document.body.classList.add("dark");
-        }else{
-            element.classList.remove('dark');
-            localStorage.setItem("theme","light");
-            document.body.classList.remove("dark");
-        }
-    },[theme])
-    useEffect(() =>{
-        const handlScroll= () =>{
+   
+    useEffect(() =>{   
             if(window.scrollY > 0){
                 setSticky(true)
             }else{
                 setSticky(false)
-            }
-        }
-window.addEventListener('scroll',handlScroll)
-return() =>{
-    window.removeEventListener("scroll",handlScroll)
-}
+            }    
     },[])
     useEffect(()=>{
         if(token){
